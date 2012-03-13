@@ -38,10 +38,11 @@ object Application extends Controller {
 
   def listBars() = Action {
     inTransaction {
-      val bars = from(BarDb.bars)(bar =>
+      val barsQuery = from(BarDb.bars)(bar =>
         select(bar)
       )
 
+      val bars = barsQuery.toList
       val json = Json.generate(bars)
       println(json)
 
