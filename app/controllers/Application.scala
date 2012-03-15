@@ -8,7 +8,8 @@ import org.squeryl.PrimitiveTypeMode._
 
 import com.codahale.jerkson.Json
 import models.{BarDb, Bar}
-import collection.mutable.ListBuffer
+
+import scala.collection.mutable.Map;
 
 object Application extends Controller {
 
@@ -41,19 +42,9 @@ object Application extends Controller {
       val barsQuery = from(BarDb.bars)(bar =>
         select(bar)
       )
-
-      val bars = barsQuery.toList
-      val json = Json.generate(bars)
+      val json = Json.generate(barsQuery)
       println(json)
-
-      var customJson = "["
-      bars.foreach(bar => {
-        if (customJson.length > 1) customJson += ","
-        customJson += "{\"name\":\"%s\"}".format(bar.name)
-      })
-      customJson += "]"
-      println(customJson)
-      Ok(customJson).as("application/json")
+      Ok(json).as("application/json")
     }
   }
 
